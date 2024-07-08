@@ -92,6 +92,18 @@ app.patch("/listings/:id", async (req, res) => {
     });
 });
 
+app.delete("/listings/:id/delete", (req, res) => {
+  const { id } = req.params;
+  Listing.findByIdAndDelete(id)
+    .then((data) => {
+      console.log(data);
+      res.redirect("/listings");
+    })
+    .catch((err) => {
+      res.redirect("error");
+    });
+});
+
 app.get("/about", (req, res) => {
   res.send("This is About Us Page");
 });

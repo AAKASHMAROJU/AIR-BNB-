@@ -15,5 +15,12 @@
     <div><%=data.location%></div>
     <div><%=data.country%></div>
     <button><a href="/listings/<%= data._id %>/edit">Edit Listing</a></button>
+    <form
+      action="http://localhost:8080/listings/<%= data._id %>/delete?_method=DELETE"
+      method="post"
+    >
+      <button type="submit">DELETE</button>
+    </form>
+    <button></button>
   </body>
 </html>
