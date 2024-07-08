@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Listings</title>
+  </head>
+  <body>
+    <h1>Welcome to AIR BNB</h1>
+    <% for(let d of data){ %>
+    <div>
+      <a href="/listings/<%= d._id %>"> <%=d.title%> </a>
+    </div>
+    <% } %>
+    <button>
+      <a href="/listings/new"> Create Listing </a>
+    </button>
+  </body>
+</html>
