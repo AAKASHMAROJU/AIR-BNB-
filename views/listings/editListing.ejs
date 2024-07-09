@@ -1,18 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Edit Listing</title>
-  </head>
-  <body>
-    <h1>Edit Your Listing</h1>
-    <form
-      action="http://localhost:8080/listings/<%= data._id %>?_method=PATCH"
-      method="post"
-    >
-      <input type="number" name="price" id="" value="<%= data.price %>" />
-      <button type="submit">Submit Changes</button>
-    </form>
-  </body>
-</html>
+<% layout("/layouts/boilerplate.ejs") -%>
+<body>
+  <h1>Edit Your Listing</h1>
+  <form
+    action="http://localhost:8080/listings/<%= data._id %>?_method=PATCH"
+    method="post"
+  >
+    <input type="number" name="price" id="" value="<%= data.price %>" />
+    <button type="submit">Submit Changes</button>
+  </form>
+</body>

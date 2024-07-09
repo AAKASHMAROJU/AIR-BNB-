@@ -1,32 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Create Listing</title>
-    <link rel="stylesheet" href="/listings/style1.css" />
-  </head>
-  <body>
-    <div class="container">
-      <form action="http://localhost:8080/listings" method="post">
-        <input type="text" placeholder="Enter the title" name="title" />
-        <br />
-        <textarea
-          type="text"
-          placeholder="Enter the description"
-          name="description"
-        ></textarea>
-        <br />
-        <input type="text" placeholder="Enter the URL" name="URL" />
-        <br />
-        <input type="number" placeholder="Enter the price" name="price" />
-        <br />
-        <input type="text" placeholder="Enter the location" name="location" />
-        <br />
-        <input type="text" placeholder="Enter the country" name="country" />
-        <br />
-        <button type="submit">Create</button>
-      </form>
-    </div>
-  </body>
-</html>
+<% layout("/layouts/boilerplate.ejs") -%>
+<body>
+  <div class="container">
+    <form action="http://localhost:8080/listings" method="post">
+      <input type="text" placeholder="Enter the title" name="title" />
+      <br />
+      <textarea
+        type="text"
+        placeholder="Enter the description"
+        name="description"
+      ></textarea>
+      <br />
+      <input type="text" placeholder="Enter the URL" name="URL" />
+      <br />
+      <input type="number" placeholder="Enter the price" name="price" />
+      <br />
+      <input type="text" placeholder="Enter the location" name="location" />
+      <br />
+      <input type="text" placeholder="Enter the country" name="country" />
+      <br />
+      <button type="submit">Create</button>
+    </form>
+  </div>
+</body>

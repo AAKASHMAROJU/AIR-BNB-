@@ -1,26 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Show Listing</title>
-  </head>
-  <body>
-    <h1><%= data.title %></h1>
-    <div><%=data.description%></div>
-    <div>
-      <img src="<%=data.image%>" alt="image-not-Loaded" />
-    </div>
-    <div>&#8377; <%=data.price.toLocaleString("en-IN")%></div>
-    <div><%=data.location%></div>
-    <div><%=data.country%></div>
-    <button><a href="/listings/<%= data._id %>/edit">Edit Listing</a></button>
-    <form
-      action="http://localhost:8080/listings/<%= data._id %>/delete?_method=DELETE"
-      method="post"
-    >
-      <button type="submit">DELETE</button>
-    </form>
-    <button></button>
-  </body>
-</html>
+<% layout("/layouts/boilerplate.ejs") -%>
+<body>
+  <h1><%= data.title %></h1>
+  <div><%=data.description%></div>
+  <div>
+    <img src="<%=data.image%>" alt="image-not-Loaded" />
+  </div>
+  <div>&#8377; <%=data.price.toLocaleString("en-IN")%></div>
+  <div><%=data.location%></div>
+  <div><%=data.country%></div>
+  <button><a href="/listings/<%= data._id %>/edit">Edit Listing</a></button>
+  <form
+    action="http://localhost:8080/listings/<%= data._id %>/delete?_method=DELETE"
+    method="post"
+  >
+    <button type="submit">DELETE</button>
+  </form>
+  <button></button>
+</body>

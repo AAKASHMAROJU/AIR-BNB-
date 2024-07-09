@@ -5,12 +5,14 @@ const path = require("path");
 const mongoose = require("mongoose");
 const Listing = require("./models/listing");
 const methodOverride = require("method-override");
+const ejsMate = require("ejs-mate");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(methodOverride("_method"));
+app.engine("ejs", ejsMate);
 
 const MONGODB_URL = "mongodb://localhost:27017/airbnb-db";
 
@@ -53,7 +55,7 @@ app.get("/listings/:id/edit", async (req, res) => {
 });
 
 app.get("/listings/:id", async (req, res) => {
-  console.log(req.params);
+  // console.log(req.params);
   const { id } = req.params;
   Listing.findById(id)
     .then((data) => {

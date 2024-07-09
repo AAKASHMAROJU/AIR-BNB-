@@ -1,0 +1,13 @@
+.fa-airbnb {
+  color: #fe424d;
+  font-size: 1.25rem;
+}
+
+.navbar {
+  background-color: white !important;
+  height: 5rem;
+}
+
+.nav-link {
+  color: black !important;
+}
