@@ -1,10 +1,26 @@
 <% layout("/layouts/boilerplate.ejs") -%>
 <body>
-  <% for(let d of data){ %>
-  <div>
-    <a href="/listings/<%= d._id %>"> <%= d.title %> </a>
+  <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
+    <% for(let d of data){ %>
+    <a style="text-decoration: none" href="/listings/<%= d._id %>">
+      <div class="card col" style="width: 20rem; border: none">
+        <img
+          src="<%=d.image%>"
+          class="card-img-top"
+          style="border-radius: 1rem; height: 18rem"
+          alt="Card Img Not Found"
+        />
+        <div class="card-body" style="text-align: center">
+          <p>
+            <b> <%= d.title %> </b>
+          </p>
+          <p>&#8377; <%= d.price.toLocaleString("en-IN") %> / night</p>
+        </div>
+      </div>
+    </a>
+    <% } %>
   </div>
-  <% } %>
+
   <!-- <button>
     <a href="/listings/new">CREATE LISTING</a>
   </button> -->
