@@ -1,19 +1,39 @@
 <% layout("/layouts/boilerplate.ejs") -%>
 <body>
-  <h1><%= data.title %></h1>
-  <div><%=data.description%></div>
-  <div>
-    <img src="<%=data.image%>" alt="image-not-Loaded" />
+  <div class="row offset-2">
+    <div class="col-9 text-center">
+      <h1><%= data.title %></h1>
+      <div><%=data.description%></div>
+      <div class="row text-center my-2">
+        <img
+          class="col-6"
+          src="<%=data.image%>"
+          alt="image-not-Loaded"
+          style="height: 20rem; border-radius: 2rem"
+        />
+      </div>
+      <div>&#8377; <%=data.price.toLocaleString("en-IN")%></div>
+      <div><%=data.location%></div>
+      <div><%=data.country%></div>
+      <div class="row">
+        <div class="col-6">
+          <button class="btn btn-dark">
+            <a
+              href="/listings/<%= data._id %>/edit"
+              style="color: white; text-decoration: none"
+              >Edit Listing</a
+            >
+          </button>
+        </div>
+        <div class="col-6">
+          <form
+            action="http://localhost:8080/listings/<%= data._id %>/delete?_method=DELETE"
+            method="post"
+          >
+            <button type="submit" class="btn btn-danger">DELETE</button>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
-  <div>&#8377; <%=data.price.toLocaleString("en-IN")%></div>
-  <div><%=data.location%></div>
-  <div><%=data.country%></div>
-  <button><a href="/listings/<%= data._id %>/edit">Edit Listing</a></button>
-  <form
-    action="http://localhost:8080/listings/<%= data._id %>/delete?_method=DELETE"
-    method="post"
-  >
-    <button type="submit">DELETE</button>
-  </form>
-  <button></button>
 </body>

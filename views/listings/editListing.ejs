@@ -1,11 +1,72 @@
 <% layout("/layouts/boilerplate.ejs") -%>
 <body>
-  <h1>Edit Your Listing</h1>
-  <form
-    action="http://localhost:8080/listings/<%= data._id %>?_method=PATCH"
-    method="post"
-  >
-    <input type="number" name="price" id="" value="<%= data.price %>" />
-    <button type="submit">Submit Changes</button>
-  </form>
+  <div class="row offset-2">
+    <h1>Edit Your Listing</h1>
+    <form
+      action="http://localhost:8080/listings/<%= data._id %>?_method=PATCH"
+      method="post"
+    >
+      <div class="col-8">
+        <div class="mb-3">
+          <label for="title" class="form-label">Title</label>
+          <input
+            type="text"
+            name="title"
+            value="<%= data.title %>"
+            class="form-control"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea name="description" class="form-control">
+<%= data.description %></textarea
+          >
+        </div>
+        <div class="mb-3">
+          <label for="url" class="form-label">Image URL</label>
+          <input
+            type="text"
+            name="url"
+            value="<%= data.image %> "
+            placeholder="Enter the Image URL"
+            class="form-control"
+          />
+        </div>
+        <div class="row">
+          <div class="mb-3 col-md-4">
+            <label for="price" class="form-label">Price</label>
+            <input
+              type="number"
+              name="price"
+              value="<%=data.price %>"
+              class="form-control"
+            />
+          </div>
+          <div class="mb-3 col-md-8">
+            <label for="location" class="form-label">Location</label>
+            <input
+              type="text"
+              name="location"
+              value="<%= data.location %> "
+              class="form-control"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="country" class="form-label">Country</label>
+          <input
+            type="text"
+            name="country"
+            value="<%= data.country %> "
+            class="form-control"
+          />
+        </div>
+        <br />
+        <div class="mb-3">
+          <button type="submit" class="btn btn-warning">Submit Changes</button>
+        </div>
+      </div>
+    </form>
+  </div>
 </body>
