@@ -62,35 +62,51 @@ app.get("/listings/:id", async (req, res) => {
       res.render("listings/showListing", { data: data });
     })
     .catch((err) => {
-      res.render("error");
+      res.render("error.ejs");
     });
 });
 
 app.post("/listings", async (req, res) => {
   console.log(req.body);
   const { title, description, URL, price, location, country } = req.body;
-  const doc1 = { title, description, image: URL, price, location, country };
+  const doc1 = {
+    title,
+    description,
+    image: { url: URL },
+    price,
+    location,
+    country,
+  };
   Listing.insertMany([doc1])
     .then((data) => {
-      console.log("Inserted Successfully");
+      console.log("Inserted Successfully", data);
+      res.redirect("/listings");
     })
     .catch((err) => {
-      console.log("errors Occured");
+      console.log("errors Occured " + err);
+      res.render("error.ejs");
     });
-  res.redirect("/listings");
 });
 
 app.patch("/listings/:id", async (req, res) => {
   console.log(req.body);
-  const { price } = req.body;
+  const { title, description, URL, price, location, country } = req.body;
+  const doc1 = {
+    title,
+    description,
+    image: { url: URL },
+    price,
+    location,
+    country,
+  };
   const { id } = req.params;
-  Listing.findByIdAndUpdate(id, { price: price })
+  Listing.findByIdAndUpdate(id, doc1)
     .then((data) => {
       console.log(data);
       res.redirect("/listings/" + id);
     })
     .catch((err) => {
-      res.render("error");
+      res.render("error.ejs");
     });
 });
 
