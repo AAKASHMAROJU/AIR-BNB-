@@ -46,10 +46,11 @@ app.get("/listings/:id/edit", async (req, res) => {
   const { id } = req.params;
   Listing.findById(id)
     .then((data) => {
+      console.log("FInd by ID prints ", data);
       res.render("listings/editListing", { data: data });
     })
     .catch((err) => {
-      res.render("error");
+      res.render("errore.js");
     });
   // res.send("Hi");
 });
@@ -68,11 +69,11 @@ app.get("/listings/:id", async (req, res) => {
 
 app.post("/listings", async (req, res) => {
   console.log(req.body);
-  const { title, description, URL, price, location, country } = req.body;
+  const { title, description, url, price, location, country } = req.body;
   const doc1 = {
     title,
     description,
-    image: { url: URL },
+    image: { url: url },
     price,
     location,
     country,
@@ -90,19 +91,23 @@ app.post("/listings", async (req, res) => {
 
 app.patch("/listings/:id", async (req, res) => {
   console.log(req.body);
-  const { title, description, URL, price, location, country } = req.body;
+  const { title, description, url, price, location, country } = req.body;
   const doc1 = {
     title,
     description,
-    image: { url: URL },
+    image: { url: url },
     price,
     location,
     country,
   };
+  console.log("Doc1", doc1);
   const { id } = req.params;
+  Listing.findById(id).then((data) => {
+    console.log("Found out ", data);
+  });
   Listing.findByIdAndUpdate(id, doc1)
     .then((data) => {
-      console.log(data);
+      console.log("Updated Data", data);
       res.redirect("/listings/" + id);
     })
     .catch((err) => {

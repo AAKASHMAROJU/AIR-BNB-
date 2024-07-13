@@ -12,6 +12,7 @@ const listingSchema = new Schema({
   image: {
     type: String,
     default: "",
+    // required: true,
     set: (v) => (v.url === "" ? "" : v.url),
   },
   price: {
