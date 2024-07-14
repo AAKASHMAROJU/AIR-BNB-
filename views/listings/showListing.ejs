@@ -6,16 +6,17 @@
       <div><%=data.description%></div>
       <div class="row text-center my-2">
         <img
-          class="col-6"
+          class="col-6 offset-3"
           src="<%=data.image%>"
           alt="image-not-Loaded"
           style="height: 20rem; border-radius: 2rem"
         />
+
+        <div>&#8377; <%=data.price.toLocaleString("en-IN")%></div>
+        <div><%=data.location%></div>
+        <div><%=data.country%></div>
       </div>
-      <div>&#8377; <%=data.price.toLocaleString("en-IN")%></div>
-      <div><%=data.location%></div>
-      <div><%=data.country%></div>
-      <div class="row">
+      <div class="row mb-4">
         <div class="col-6">
           <button class="btn btn-dark">
             <a
