@@ -2,7 +2,12 @@
 <body>
   <div class="row">
     <div class="col-8 offset-2">
-      <form action="http://localhost:8080/listings" method="post">
+      <form
+        action="http://localhost:8080/listings"
+        method="post"
+        class="needs-validation"
+        novalidate
+      >
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
           <input
@@ -10,11 +15,12 @@
             name="title"
             placeholder="Enter the Title"
             class="form-control"
+            required
           />
         </div>
         <div class="mb-3">
           <label for="description" class="form-label">Description</label>
-          <textarea name="description" class="form-control"></textarea>
+          <textarea name="description" class="form-control" required></textarea>
         </div>
         <div class="mb-3">
           <label for="url" class="form-label">Image URL</label>
@@ -33,6 +39,7 @@
               name="price"
               placeholder="Enter the Price"
               class="form-control"
+              required
             />
           </div>
           <div class="mb-3 col-md-8">
@@ -42,6 +49,7 @@
               name="location"
               placeholder="Enter the Location"
               class="form-control"
+              required
             />
           </div>
         </div>
@@ -53,6 +61,7 @@
             name="country"
             placeholder="Enter the Country"
             class="form-control"
+            required
           />
         </div>
         <br />
