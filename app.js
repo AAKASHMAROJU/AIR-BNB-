@@ -6,6 +6,10 @@ const mongoose = require("mongoose");
 const Listing = require("./models/listing");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
+const wrapAsync = require("./utils/wrapAsync");
+const ExpressError = require("./utils/ExpressError");
+const { wrap } = require("module");
+const listingSchema = require("./Schema");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -28,107 +32,113 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
-app.get("/listings", (req, res) => {
-  Listing.find()
-    .then((d) => {
-      res.render("listings/showData.ejs", { data: d });
-    })
-    .catch((e) => {
-      res.render("error");
-    });
-});
+const validateListing = (req, res, next) => {
+  const result = listingSchema.validate(req.body);
+  if (result.error) {
+    throw new ExpressError(400, result.error.message);
+  } else {
+    next();
+  }
+};
+
+app.get(
+  "/listings",
+  wrapAsync(async (req, res) => {
+    const d = await Listing.find();
+    res.render("listings/showData.ejs", { data: d });
+  })
+);
 
 app.get("/listings/new", (req, res) => {
   res.render("listings/createListing.ejs");
 });
 
-app.get("/listings/:id/edit", async (req, res) => {
-  const { id } = req.params;
-  Listing.findById(id)
-    .then((data) => {
+app.get(
+  "/listings/:id/edit",
+  wrapAsync(async (req, res) => {
+    const { id } = req.params;
+    await Listing.findById(id).then((data) => {
       console.log("FInd by ID prints ", data);
       res.render("listings/editListing", { data: data });
-    })
-    .catch((err) => {
-      res.render("errore.js");
     });
-  // res.send("Hi");
-});
+  })
+);
 
-app.get("/listings/:id", async (req, res) => {
-  // console.log(req.params);
-  const { id } = req.params;
-  Listing.findById(id)
-    .then((data) => {
-      res.render("listings/showListing", { data: data });
-    })
-    .catch((err) => {
-      res.render("error.ejs");
+app.get(
+  "/listings/:id",
+  wrapAsync(async (req, res, next) => {
+    // console.log(req.params);
+    const { id } = req.params;
+    const data = await Listing.findById(id);
+    res.render("listings/showListing", { data });
+  })
+);
+
+app.post(
+  "/listings",
+  validateListing,
+  wrapAsync(async (req, res, next) => {
+    const { title, description, url, price, location, country } = req.body;
+    const doc1 = {
+      title,
+      description,
+      image: { url: url },
+      price,
+      location,
+      country,
+    };
+    await Listing.insertMany([doc1]);
+    res.redirect("/listings");
+  })
+);
+
+app.patch(
+  "/listings/:id",
+  validateListing,
+  wrapAsync(async (req, res) => {
+    // console.log(req.body);
+    const { title, description, url, price, location, country } = req.body;
+    const doc1 = {
+      title,
+      description,
+      image: { url: url },
+      price,
+      location,
+      country,
+    };
+    console.log("Doc1", doc1);
+    const { id } = req.params;
+    Listing.findById(id).then((data) => {
+      console.log("Found out ", data);
     });
-});
-
-app.post("/listings", async (req, res) => {
-  console.log(req.body);
-  const { title, description, url, price, location, country } = req.body;
-  const doc1 = {
-    title,
-    description,
-    image: { url: url },
-    price,
-    location,
-    country,
-  };
-  Listing.insertMany([doc1])
-    .then((data) => {
-      console.log("Inserted Successfully", data);
-      res.redirect("/listings");
-    })
-    .catch((err) => {
-      console.log("errors Occured " + err);
-      res.render("error.ejs");
-    });
-});
-
-app.patch("/listings/:id", async (req, res) => {
-  console.log(req.body);
-  const { title, description, url, price, location, country } = req.body;
-  const doc1 = {
-    title,
-    description,
-    image: { url: url },
-    price,
-    location,
-    country,
-  };
-  console.log("Doc1", doc1);
-  const { id } = req.params;
-  Listing.findById(id).then((data) => {
-    console.log("Found out ", data);
-  });
-  Listing.findByIdAndUpdate(id, doc1)
-    .then((data) => {
+    Listing.findByIdAndUpdate(id, doc1).then((data) => {
       console.log("Updated Data", data);
       res.redirect("/listings/" + id);
-    })
-    .catch((err) => {
-      res.render("error.ejs");
     });
-});
+  })
+);
 
 app.delete("/listings/:id/delete", (req, res) => {
   const { id } = req.params;
-  Listing.findByIdAndDelete(id)
-    .then((data) => {
-      console.log(data);
-      res.redirect("/listings");
-    })
-    .catch((err) => {
-      res.redirect("error");
-    });
+  Listing.findByIdAndDelete(id).then((data) => {
+    console.log(data);
+    res.redirect("/listings");
+  });
 });
 
 app.get("/about", (req, res) => {
   res.send("This is About Us Page");
+});
+
+app.all("*", (req, res, next) => {
+  next(new ExpressError(404, "Page Not Found"));
+});
+
+app.use((err, req, res, next) => {
+  // console.log(err);
+  const { statusCode = 500, message = "Something went Wrong" } = err;
+  res.status(statusCode).render("error.ejs", { message });
+  // res.send("I Handled the Error it is " + err);
 });
 
 app.listen(port, () => {

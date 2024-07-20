@@ -17,10 +17,12 @@
             class="form-control"
             required
           />
+          <div class="valid-feedback">Title Looks Good!</div>
         </div>
         <div class="mb-3">
           <label for="description" class="form-label">Description</label>
           <textarea name="description" class="form-control" required></textarea>
+          <div class="invalid-feedback">Enter a Description</div>
         </div>
         <div class="mb-3">
           <label for="url" class="form-label">Image URL</label>
@@ -35,12 +37,12 @@
           <div class="mb-3 col-md-4">
             <label for="price" class="form-label">Price</label>
             <input
-              type="number"
               name="price"
               placeholder="Enter the Price"
               class="form-control"
               required
             />
+            <div class="invalid-feedback">Price is Invalid</div>
           </div>
           <div class="mb-3 col-md-8">
             <label for="location" class="form-label">Location</label>
@@ -51,6 +53,7 @@
               class="form-control"
               required
             />
+            <div class="invalid-feedback">Invalid Location</div>
           </div>
         </div>
 
@@ -63,6 +66,7 @@
             class="form-control"
             required
           />
+          <div class="invalid-feedback">Invalid Country Name</div>
         </div>
         <br />
         <div class="mb-3">

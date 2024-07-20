@@ -5,6 +5,8 @@
     <form
       action="http://localhost:8080/listings/<%= data._id %>?_method=PATCH"
       method="post"
+      class="needs-validation"
+      novalidate
     >
       <div class="col-8">
         <div class="mb-3">
@@ -14,13 +16,16 @@
             name="title"
             value="<%= data.title %>"
             class="form-control"
+            required
           />
+          <div class="invalid-feedback">Title is Invalid</div>
         </div>
         <div class="mb-3">
           <label for="description" class="form-label">Description</label>
-          <textarea name="description" class="form-control">
+          <textarea name="description" class="form-control" required>
 <%= data.description %></textarea
           >
+          <div class="invalid-feedback">Description is Invalid</div>
         </div>
         <div class="mb-3">
           <label for="url" class="form-label">Image URL</label>
@@ -30,17 +35,20 @@
             value="<%= data.image %> "
             placeholder="Enter the Image URL"
             class="form-control"
+            required
           />
+          <div class="invalid-feedback">Image Link is Invalid</div>
         </div>
         <div class="row">
           <div class="mb-3 col-md-4">
             <label for="price" class="form-label">Price</label>
             <input
-              type="number"
               name="price"
               value="<%=data.price %>"
               class="form-control"
+              required
             />
+            <div class="invalid-feedback">Price is Invalid</div>
           </div>
           <div class="mb-3 col-md-8">
             <label for="location" class="form-label">Location</label>
@@ -49,7 +57,9 @@
               name="location"
               value="<%= data.location %> "
               class="form-control"
+              required
             />
+            <div class="invalid-feedback">Location is Invalid</div>
           </div>
         </div>
 
@@ -60,7 +70,9 @@
             name="country"
             value="<%= data.country %> "
             class="form-control"
+            required
           />
+          <div class="invalid-feedback">Country Name is Invalid</div>
         </div>
         <br />
         <div class="mb-3">
