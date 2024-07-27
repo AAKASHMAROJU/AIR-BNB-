@@ -127,10 +127,10 @@ app.patch(
     });
   })
 );
-// when you delete the Listing => delete all the rela
-app.delete("/listings/:id/delete", (req, res) => {
+// when you delete the Listing => delete all the related reviews also .....
+app.delete("/listings/:id/delete", async (req, res) => {
   const { id } = req.params;
-  Listing.findByIdAndDelete(id).then((data) => {
+  await Listing.findByIdAndDelete(id).then((data) => {
     // console.log(data);
     res.redirect("/listings");
   });
