@@ -44,17 +44,22 @@
       </div>
 
       <% if(data.reviews.length){ %>
-      <div class="reviewContainer">
+      <div class="reviewContainer row m-4">
         <% for(let e of data.reviews){ %>
 
-        <div
-          class="card text-white bg-info mb-3"
-          style="max-width: 18rem; border: 2px solid red"
-        >
+        <div class="card text-white bg-info m-2 col-5">
           <div class="card-header"><%= e.rating %> Stars</div>
           <div class="card-body">
             <h5 class="card-title"><%= e.comment%></h5>
             <p class="card-text">~Aakash</p>
+            <form
+              action="http://localhost:8080/listings/<%= data._id %>/review/<%= e._id %>?_method=DELETE"
+              method="post"
+            >
+              <button type="submit" class="del-icon-btn">
+                <p class="del-icon"><i class="fa-solid fa-trash"></i></p>
+              </button>
+            </form>
           </div>
         </div>
 

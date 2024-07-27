@@ -127,7 +127,7 @@ app.patch(
     });
   })
 );
-
+// when you delete the Listing => delete all the rela
 app.delete("/listings/:id/delete", (req, res) => {
   const { id } = req.params;
   Listing.findByIdAndDelete(id).then((data) => {
@@ -172,6 +172,23 @@ app.post(
 
     // res.send("Heyy there Data Posted Correctly");
     res.redirect(`/listings/${id}`);
+  })
+);
+
+app.delete(
+  "/listings/:id/review/:rId",
+  wrapAsync(async (req, res) => {
+    const { id, rId } = req.params; // this id is listing ID
+    // const { rid } = rid; // review ID
+    // goto Listing and delete reviewID from the reviews array and redirect to review page
+    console.log(id, rId);
+    // things to do1. delete the reference in ListingSchema and also delete the Review from reviewdb
+    await Listing.findByIdAndUpdate(id, {
+      $pull: { reviews: rId },
+    });
+    await Review.findByIdAndDelete(rId); // deleting thr review
+    res.redirect(`/listings/${id}`);
+    // await Listing.findByIdAndDelete(id);
   })
 );
 

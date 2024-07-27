@@ -65,8 +65,15 @@ body {
 }
 
 .reviewContainer {
-  border: 2px solid black;
   display: flex;
-  flex-wrap: wrap;
-  align-items: space-around;
+  justify-content: center;
+  /* align-items: center; */
+}
+
+.del-icon {
+  cursor: pointer;
+}
+
+.del-icon-btn {
+  all: initial;
 }
