@@ -6,9 +6,9 @@ async function main() {
   await mongoose.connect("mongodb://localhost:27017/reviews-db");
 }
 
-main()
-  .then(() => console.log("connected Successfully"))
-  .catch((err) => console.log(err));
+// main()
+//   .then(() => console.log("connected Successfully"))
+//   .catch((err) => console.log(err));
 
 const { Schema } = mongoose;
 

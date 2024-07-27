@@ -10,6 +10,7 @@ const wrapAsync = require("./utils/wrapAsync");
 const ExpressError = require("./utils/ExpressError");
 const { wrap } = require("module");
 const listingSchema = require("./Schema");
+const Review = require("./models/review");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -106,13 +107,13 @@ app.patch(
       location,
       country,
     };
-    console.log("Doc1", doc1);
+    // console.log("Doc1", doc1);
     const { id } = req.params;
     Listing.findById(id).then((data) => {
       console.log("Found out ", data);
     });
     Listing.findByIdAndUpdate(id, doc1).then((data) => {
-      console.log("Updated Data", data);
+      // console.log("Updated Data", data);
       res.redirect("/listings/" + id);
     });
   })
@@ -121,13 +122,44 @@ app.patch(
 app.delete("/listings/:id/delete", (req, res) => {
   const { id } = req.params;
   Listing.findByIdAndDelete(id).then((data) => {
-    console.log(data);
+    // console.log(data);
     res.redirect("/listings");
   });
 });
 
 app.get("/about", (req, res) => {
   res.send("This is About Us Page");
+});
+
+app.get("/listings/:id/review", (req, res) => {
+  const { id } = req.params;
+  res.render("reviews/createReview", { id });
+});
+
+app.post("/listings/:id/review", async (req, res) => {
+  const { id } = req.params;
+  // const {content, create.d}=req.body;
+  const { comment, rating, date } = req.body;
+
+  // send this to reviews db
+  const doc = { comment, rating, date };
+  const data = await Review.insertMany([doc]);
+  console.log("The Value in data[0] id is : " + data[0]);
+  // const data_json = await Listing.findOne
+  // // this review corresponds to which building list
+  const result = await Listing.findByIdAndUpdate(id, {
+    $push: { reviews: data[0] },
+    function(err, success) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(success);
+      }
+    },
+  });
+
+  // res.send("Heyy there Data Posted Correctly");
+  res.redirect(`/listings/${id}`);
 });
 
 app.all("*", (req, res, next) => {
