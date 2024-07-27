@@ -13,9 +13,12 @@ async function main() {
 const { Schema } = mongoose;
 
 const reviewSchema = new Schema({
-  comment: String,
+  comment: {
+    type: String,
+  },
   rating: {
     type: Number,
+    default: 3,
     min: 1,
     max: 5,
   },

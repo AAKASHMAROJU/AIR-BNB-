@@ -42,6 +42,25 @@
           >
         </button>
       </div>
+
+      <% if(data.reviews.length){ %>
+      <div class="reviewContainer">
+        <% for(let e of data.reviews){ %>
+
+        <div
+          class="card text-white bg-info mb-3"
+          style="max-width: 18rem; border: 2px solid red"
+        >
+          <div class="card-header"><%= e.rating %> Stars</div>
+          <div class="card-body">
+            <h5 class="card-title"><%= e.comment%></h5>
+            <p class="card-text">~Aakash</p>
+          </div>
+        </div>
+
+        <% } %>
+      </div>
+      <% } %>
     </div>
   </div>
 </body>

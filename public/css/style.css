@@ -63,3 +63,10 @@ body {
 .container {
   flex: 1;
 }
+
+.reviewContainer {
+  border: 2px solid black;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: space-around;
+}

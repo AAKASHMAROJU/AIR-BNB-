@@ -9,7 +9,7 @@ const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync");
 const ExpressError = require("./utils/ExpressError");
 const { wrap } = require("module");
-const listingSchema = require("./Schema");
+const { listingSchema, reviewSchema } = require("./Schema");
 const Review = require("./models/review");
 
 app.set("view engine", "ejs");
@@ -35,6 +35,15 @@ app.get("/", (req, res) => {
 
 const validateListing = (req, res, next) => {
   const result = listingSchema.validate(req.body);
+  if (result.error) {
+    throw new ExpressError(400, result.error.message);
+  } else {
+    next();
+  }
+};
+
+const validateReview = (req, res, next) => {
+  const result = reviewSchema.validate(req.body);
   if (result.error) {
     throw new ExpressError(400, result.error.message);
   } else {
@@ -70,7 +79,7 @@ app.get(
   wrapAsync(async (req, res, next) => {
     // console.log(req.params);
     const { id } = req.params;
-    const data = await Listing.findById(id);
+    const data = await Listing.findById(id).populate("reviews");
     res.render("listings/showListing", { data });
   })
 );
@@ -136,31 +145,35 @@ app.get("/listings/:id/review", (req, res) => {
   res.render("reviews/createReview", { id });
 });
 
-app.post("/listings/:id/review", async (req, res) => {
-  const { id } = req.params;
-  // const {content, create.d}=req.body;
-  const { comment, rating, date } = req.body;
+app.post(
+  "/listings/:id/review",
+  validateReview,
+  wrapAsync(async (req, res) => {
+    const { id } = req.params;
+    // const {content, create.d}=req.body;
+    const { comment, rating, date } = req.body;
 
-  // send this to reviews db
-  const doc = { comment, rating, date };
-  const data = await Review.insertMany([doc]);
-  console.log("The Value in data[0] id is : " + data[0]);
-  // const data_json = await Listing.findOne
-  // // this review corresponds to which building list
-  const result = await Listing.findByIdAndUpdate(id, {
-    $push: { reviews: data[0] },
-    function(err, success) {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(success);
-      }
-    },
-  });
+    // send this to reviews db
+    const doc = { comment, rating, date };
+    const data = await Review.insertMany([doc]);
+    console.log("The Value in data[0] id is : " + data[0]);
+    // const data_json = await Listing.findOne
+    // // this review corresponds to which building list
+    const result = await Listing.findByIdAndUpdate(id, {
+      $push: { reviews: data[0] },
+      function(err, success) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(success);
+        }
+      },
+    });
 
-  // res.send("Heyy there Data Posted Correctly");
-  res.redirect(`/listings/${id}`);
-});
+    // res.send("Heyy there Data Posted Correctly");
+    res.redirect(`/listings/${id}`);
+  })
+);
 
 app.all("*", (req, res, next) => {
   next(new ExpressError(404, "Page Not Found"));
