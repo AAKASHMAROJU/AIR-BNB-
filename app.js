@@ -7,9 +7,13 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError");
 const session = require("express-session");
-const listing = require("./routes/listing");
-const review = require("./routes/review");
+const listingRouter = require("./routes/listing");
+const reviewRouter = require("./routes/review");
+const userRouter = require("./routes/user");
 const flash = require("connect-flash");
+const User = require("./models/user");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -32,15 +36,26 @@ const sessionOptions = {
 app.use(session(sessionOptions));
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+
+passport.deserializeUser(User.deserializeUser());
+
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   next();
 });
 
-app.use("/listings", listing);
+app.use("/listings", listingRouter);
 
-app.use("/listings/:id/review", review);
+app.use("/listings/:id/review", reviewRouter);
+
+app.use("/", userRouter);
 
 const MONGODB_URL = "mongodb://localhost:27017/airbnb-db";
 
@@ -51,6 +66,12 @@ async function main() {
 main()
   .then(() => console.log("DataBase Connected Successfully"))
   .catch((err) => console.log(err));
+
+// app.get("/demoUser", async (req, res) => {
+//   const doc1 = new User({ useremail: "aakash@gmail.com", username: "Aakash" });
+//   let registeredUser = await User.register(doc1, "password@123");
+//   res.send(registeredUser);
+// });
 
 app.get("/", (req, res) => {
   res.render("index");
