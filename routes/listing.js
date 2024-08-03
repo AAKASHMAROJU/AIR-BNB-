@@ -30,10 +30,12 @@ router.get(
   "/:id/edit",
   wrapAsync(async (req, res) => {
     const { id } = req.params;
-    await Listing.findById(id).then((data) => {
-      console.log("FInd by ID prints ", data);
-      res.render("listings/editListing", { data: data });
-    });
+    const data = await Listing.findById(id);
+    if (!data) {
+      req.flash("error", "Listing you are Looking for Does not Exist");
+      res.redirect("/listings");
+    }
+    res.render("listings/editListing", { data: data });
   })
 );
 
@@ -43,6 +45,10 @@ router.get(
     // console.log(req.params);
     const { id } = req.params;
     const data = await Listing.findById(id).populate("reviews");
+    if (!data) {
+      req.flash("error", "Listing you are Looking for Does not Exist");
+      res.redirect("/listings");
+    }
     res.render("listings/showListing", { data });
   })
 );
