@@ -46,7 +46,7 @@ router.get(
     res.render("listings/showListing", { data });
   })
 );
-
+// Inserting
 router.post(
   "/",
   validateListing,
@@ -60,6 +60,7 @@ router.post(
       location,
       country,
     };
+    req.flash("success", "Listing has been Created Successfully");
     await Listing.insertMany([doc1]);
     res.redirect("/listings");
   })
@@ -85,7 +86,7 @@ router.patch(
       console.log("Found out ", data);
     });
     Listing.findByIdAndUpdate(id, doc1).then((data) => {
-      // console.log("Updated Data", data);
+      req.flash("success", "Listing has been Updated Successfully");
       res.redirect("/listings/" + id);
     });
   })
@@ -94,7 +95,7 @@ router.patch(
 router.delete("/:id/delete", async (req, res) => {
   const { id } = req.params;
   await Listing.findByIdAndDelete(id).then((data) => {
-    // console.log(data);
+    req.flash("success", "Listing has been Deleted Successfully");
     res.redirect("/listings");
   });
 });
