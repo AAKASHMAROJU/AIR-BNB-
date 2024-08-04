@@ -3,7 +3,7 @@ const User = require("../models/user");
 const wrapAsync = require("../utils/wrapAsync");
 const passport = require("passport");
 const router = express.Router({ mergeParams: true });
-
+const isLoggedIn = require("../middleware");
 router.get("/signup", (req, res, next) => {
   //   res.send("User singed in Successfully");
   res.render("user/signup.ejs");
@@ -21,8 +21,14 @@ router.post(
       });
       const reg_user = await User.register(user1, password);
       console.log(reg_user);
-      req.flash("success", "Welcome to te AIR BNB " + username);
-      res.redirect("/listings");
+      req.login(reg_user, (err) => {
+        if (err) {
+          next(err);
+        } else {
+          req.flash("success", "Welcome to te AIR BNB " + username);
+          res.redirect("/listings");
+        }
+      });
     } catch (e) {
       req.flash("error", e.message);
       res.redirect("/signup");
@@ -47,5 +53,16 @@ router.post(
     res.redirect("/listings");
   }
 );
+
+router.get("/logout", (req, res) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    } else {
+      req.flash("success", "user logged out successfully");
+      res.redirect("/listings");
+    }
+  });
+});
 
 module.exports = router;

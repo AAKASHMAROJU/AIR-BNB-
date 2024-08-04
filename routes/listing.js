@@ -4,6 +4,7 @@ const Listing = require("../models/listing");
 const wrapAsync = require("../utils/wrapAsync");
 const ExpressError = require("../utils/ExpressError");
 const { listingSchema } = require("../Schema");
+const isLoggedIn = require("../middleware");
 
 const validateListing = (req, res, next) => {
   const result = listingSchema.validate(req.body);
@@ -22,12 +23,13 @@ router.get(
   })
 );
 
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {
   res.render("listings/createListing.ejs");
 });
 
 router.get(
   "/:id/edit",
+  isLoggedIn,
   wrapAsync(async (req, res) => {
     const { id } = req.params;
     const data = await Listing.findById(id);
@@ -98,7 +100,7 @@ router.patch(
   })
 );
 // when you delete the Listing => delete all the related reviews also .....
-router.delete("/:id/delete", async (req, res) => {
+router.delete("/:id/delete", isLoggedIn, async (req, res) => {
   const { id } = req.params;
   await Listing.findByIdAndDelete(id).then((data) => {
     req.flash("success", "Listing has been Deleted Successfully");
