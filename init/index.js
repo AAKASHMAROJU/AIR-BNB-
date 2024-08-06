@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const MONGODB_URL = "mongodb://127.0.0.1:27017/airbnb-db";
 
-const data = require("./data");
+const initData = require("./data");
 
 const Listing = require("./../models/listing");
 // const Schema = ;
@@ -17,7 +17,11 @@ main()
 
 async function initDB() {
   await Listing.deleteMany({});
-  await Listing.insertMany(data.data);
+  const data = initData.data.map((e) => ({
+    ...e,
+    owner: "66ae44af3895d8b287ccd36a",
+  }));
+  await Listing.insertMany(data);
   console.log("Data Initialization performed successfully");
 }
 
