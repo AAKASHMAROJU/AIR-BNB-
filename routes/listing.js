@@ -4,7 +4,7 @@ const Listing = require("../models/listing");
 const wrapAsync = require("../utils/wrapAsync");
 const ExpressError = require("../utils/ExpressError");
 const { listingSchema } = require("../Schema");
-const isLoggedIn = require("../middleware");
+const { isLoggedIn } = require("../middleware");
 
 const validateListing = (req, res, next) => {
   const result = listingSchema.validate(req.body);
@@ -24,6 +24,8 @@ router.get(
 );
 
 router.get("/new", isLoggedIn, (req, res) => {
+  console.log(req.user);
+
   res.render("listings/createListing.ejs");
 });
 
