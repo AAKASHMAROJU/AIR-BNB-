@@ -48,11 +48,15 @@ router.get(
   wrapAsync(async (req, res, next) => {
     // console.log(req.params);
     const { id } = req.params;
-    const data = await Listing.findById(id).populate("reviews");
+    const data = await Listing.findById(id)
+      .populate("reviews")
+      .populate("owner");
     if (!data) {
       req.flash("error", "Listing you are Looking for Does not Exist");
       res.redirect("/listings");
     }
+    console.log(data);
+
     res.render("listings/showListing", { data });
   })
 );
@@ -70,6 +74,9 @@ router.post(
       location,
       country,
     };
+    doc1.owner = req.user._id;
+    console.log("owner   ", req.user);
+
     req.flash("success", "Listing has been Created Successfully");
     await Listing.insertMany([doc1]);
     res.redirect("/listings");
