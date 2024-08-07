@@ -99,13 +99,20 @@ router.patch(
     };
     // console.log("Doc1", doc1);
     const { id } = req.params;
-    Listing.findById(id).then((data) => {
-      console.log("Found out ", data);
-    });
-    Listing.findByIdAndUpdate(id, doc1).then((data) => {
-      req.flash("success", "Listing has been Updated Successfully");
+    let data = await Listing.findById(id);
+    console.log("Error rectified ");
+
+    console.log(data.owner, res.locals.user._id);
+
+    if (data.owner.equals(res.locals.user?._id)) {
+      Listing.findByIdAndUpdate(id, doc1).then((data) => {
+        req.flash("success", "Listing has been Updated Successfully");
+        res.redirect("/listings/" + id);
+      });
+    } else {
+      req.flash("error", "You cannot update Listing... Invalid Access");
       res.redirect("/listings/" + id);
-    });
+    }
   })
 );
 // when you delete the Listing => delete all the related reviews also .....
