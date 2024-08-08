@@ -2,18 +2,8 @@ const express = require("express");
 const router = express.Router();
 const Listing = require("../models/listing");
 const wrapAsync = require("../utils/wrapAsync");
-const ExpressError = require("../utils/ExpressError");
-const { listingSchema } = require("../Schema");
-const { isLoggedIn } = require("../middleware");
-
-const validateListing = (req, res, next) => {
-  const result = listingSchema.validate(req.body);
-  if (result.error) {
-    throw new ExpressError(400, result.error.message);
-  } else {
-    next();
-  }
-};
+const { validateListing } = require("../middleware");
+const { isLoggedIn, isOwner } = require("../middleware");
 
 router.get(
   "/",
@@ -24,7 +14,7 @@ router.get(
 );
 
 router.get("/new", isLoggedIn, (req, res) => {
-  console.log(req.user);
+  // console.log(req.user);
 
   res.render("listings/createListing.ejs");
 });
@@ -46,16 +36,19 @@ router.get(
 router.get(
   "/:id",
   wrapAsync(async (req, res, next) => {
-    // console.log(req.params);
+    // // console.log(req.params);
     const { id } = req.params;
     const data = await Listing.findById(id)
-      .populate("reviews")
+      .populate({
+        path: "reviews",
+        populate: { path: "author", model: "User" },
+      })
       .populate("owner");
     if (!data) {
       req.flash("error", "Listing you are Looking for Does not Exist");
       res.redirect("/listings");
     }
-    console.log(data);
+    // console.log(data);
 
     res.render("listings/showListing", { data });
   })
@@ -75,7 +68,7 @@ router.post(
       country,
     };
     doc1.owner = req.user._id;
-    console.log("owner   ", req.user);
+    // console.log("owner   ", req.user);
 
     req.flash("success", "Listing has been Created Successfully");
     await Listing.insertMany([doc1]);
@@ -86,8 +79,9 @@ router.post(
 router.patch(
   "/:id",
   validateListing,
+  isOwner,
   wrapAsync(async (req, res) => {
-    // console.log(req.body);
+    // // console.log(req.body);
     const { title, description, url, price, location, country } = req.body;
     const doc1 = {
       title,
@@ -97,26 +91,14 @@ router.patch(
       location,
       country,
     };
-    // console.log("Doc1", doc1);
-    const { id } = req.params;
-    let data = await Listing.findById(id);
-    console.log("Error rectified ");
-
-    console.log(data.owner, res.locals.user._id);
-
-    if (data.owner.equals(res.locals.user?._id)) {
-      Listing.findByIdAndUpdate(id, doc1).then((data) => {
-        req.flash("success", "Listing has been Updated Successfully");
-        res.redirect("/listings/" + id);
-      });
-    } else {
-      req.flash("error", "You cannot update Listing... Invalid Access");
+    Listing.findByIdAndUpdate(id, doc1).then((data) => {
+      req.flash("success", "Listing has been Updated Successfully");
       res.redirect("/listings/" + id);
-    }
+    });
   })
 );
 // when you delete the Listing => delete all the related reviews also .....
-router.delete("/:id/delete", isLoggedIn, async (req, res) => {
+router.delete("/:id/delete", isLoggedIn, isOwner, async (req, res) => {
   const { id } = req.params;
   await Listing.findByIdAndDelete(id).then((data) => {
     req.flash("success", "Listing has been Deleted Successfully");

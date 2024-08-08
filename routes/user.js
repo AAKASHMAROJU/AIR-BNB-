@@ -16,13 +16,13 @@ router.post(
   wrapAsync(async (req, res) => {
     try {
       const { email, password, username } = req.body;
-      // console.log(email, password, username);
+      // // // console.log(email, password, username);
       const user1 = new User({
         email,
         username,
       });
       const reg_user = await User.register(user1, password);
-      console.log(reg_user);
+      // // console.log(reg_user);
       req.login(reg_user, (err) => {
         if (err) {
           next(err);
@@ -53,7 +53,7 @@ router.post(
   }),
   async (req, res, next) => {
     req.flash("success", "User Logged In Successfully");
-    console.log(res.locals.redirectUrl);
+    // // console.log(res.locals.redirectUrl);
 
     let redirectUrl = res.locals.redirectUrl || "/listings";
     res.redirect(redirectUrl);

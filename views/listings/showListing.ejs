@@ -17,7 +17,7 @@
         <div><%=data.location%></div>
         <div><%=data.country%></div>
       </div>
-      <% if(data && user && data.owner?._id.equals(user._id) ){ %>
+      <% //if(data && user && data.owner?._id.equals(user._id) ){ %>
       <div class="row mb-4">
         <div class="col-6">
           <button class="btn btn-dark">
@@ -37,7 +37,7 @@
           </form>
         </div>
       </div>
-      <% } %>
+      <%// } %>
       <div>
         <button>
           <a href="http://localhost:8080/listings/<%= data._id %>/review"
@@ -54,7 +54,7 @@
           <div class="card-header"><%= e.rating %> Stars</div>
           <div class="card-body">
             <h5 class="card-title"><%= e.comment%></h5>
-            <p class="card-text">~Aakash</p>
+            <p class="card-text">~<%= e.author.username %></p>
             <form
               action="http://localhost:8080/listings/<%= data._id %>/review/<%= e._id %>?_method=DELETE"
               method="post"
