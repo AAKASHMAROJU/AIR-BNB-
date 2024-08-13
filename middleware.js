@@ -32,7 +32,7 @@ module.exports.isOwner = async (req, res, next) => {
       "error",
       "You cannot Perform this operation... Invalid Owner Access"
     );
-    res.redirect("/listings/" + id);
+    return res.redirect("/listings/" + id);
   }
   next();
 };

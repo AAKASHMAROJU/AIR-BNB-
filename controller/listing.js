@@ -53,6 +53,7 @@ module.exports.createListing = async (req, res, next) => {
 };
 
 module.exports.updateListing = async (req, res) => {
+  const { id } = req.params;
   const { title, description, url, price, location, country } = req.body;
   const doc1 = {
     title,
