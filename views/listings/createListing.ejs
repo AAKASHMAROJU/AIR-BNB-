@@ -7,6 +7,7 @@
         method="post"
         class="needs-validation"
         novalidate
+        enctype="multipart/form-data"
       >
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
@@ -25,13 +26,8 @@
           <div class="invalid-feedback">Enter a Description</div>
         </div>
         <div class="mb-3">
-          <label for="url" class="form-label">Image URL</label>
-          <input
-            type="text"
-            name="url"
-            placeholder="Enter the Image URL"
-            class="form-control"
-          />
+          <label for="url" class="form-label">Image Upload</label>
+          <input type="file" name="url" class="form-control" />
         </div>
         <div class="row">
           <div class="mb-3 col-md-4">
