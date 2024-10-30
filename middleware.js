@@ -39,6 +39,7 @@ module.exports.isOwner = async (req, res, next) => {
 
 module.exports.validateListing = (req, res, next) => {
   const result = listingSchema.validate(req.body);
+  console.log(result);
   if (result.error) {
     throw new ExpressError(400, result.error.message);
   } else {

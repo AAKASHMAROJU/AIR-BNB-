@@ -1,13 +1,13 @@
 const Joi = require("joi").extend(require("@joi/date"));
 
 const listingSchema = Joi.object({
-  title: Joi.string().min(3).max(30).required(),
+  title: Joi.string().min(3).max(30),
 
-  description: Joi.string().required(),
-  location: Joi.string().required(),
-  price: Joi.number().min(0).required(),
+  description: Joi.string(),
+  location: Joi.string(),
+  price: Joi.number().min(0),
   url: Joi.string().allow("", null),
-  country: Joi.string().required(),
+  country: Joi.string(),
 });
 
 const reviewSchema = Joi.object({
