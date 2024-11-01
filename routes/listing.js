@@ -6,14 +6,18 @@ const { validateListing } = require("../middleware");
 const { isLoggedIn, isOwner } = require("../middleware");
 const listingController = require("../controller/listing");
 const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+const { storage } = require("../cloudConfig");
+const upload = multer({ storage });
+
 router
   .route("/")
   .get(wrapAsync(listingController.index))
-  .post(upload.single("url"), (req, res) => {
-    res.send(req.file);
-  });
-// .post(validateListing, wrapAsync(listingController.createListing));
+  .post(
+    isLoggedIn,
+    validateListing,
+    upload.single("url"),
+    wrapAsync(listingController.createListing)
+  );
 
 router.get("/new", isLoggedIn, listingController.newListing);
 
@@ -22,7 +26,12 @@ router.get("/:id/edit", isLoggedIn, wrapAsync(listingController.editListing));
 router
   .route("/:id")
   .get(wrapAsync(listingController.showListing))
-  .patch(validateListing, isOwner, wrapAsync(listingController.updateListing));
+  .patch(
+    validateListing,
+    isOwner,
+    upload.single("url"),
+    wrapAsync(listingController.updateListing)
+  );
 // Inserting
 
 // when you delete the Listing => delete all the related reviews also .....

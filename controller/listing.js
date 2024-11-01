@@ -35,11 +35,12 @@ module.exports.showListing = async (req, res, next) => {
 };
 
 module.exports.createListing = async (req, res, next) => {
-  const { title, description, url, price, location, country } = req.body;
+  const { path, filename } = req.file;
+  const { title, description, price, location, country } = req.body;
   const doc1 = {
     title,
     description,
-    image: { url: url },
+    image: { url: path, filename: filename },
     price,
     location,
     country,
@@ -54,15 +55,20 @@ module.exports.createListing = async (req, res, next) => {
 
 module.exports.updateListing = async (req, res) => {
   const { id } = req.params;
-  const { title, description, url, price, location, country } = req.body;
-  const doc1 = {
+
+  const { title, description, price, location, country } = req.body;
+  let doc1 = {
     title,
     description,
-    image: { url: url },
     price,
     location,
     country,
   };
+  if (typeof req.file !== "undefined") {
+    let url = req.file.path;
+    let filename = req.file.filename;
+    doc1.image = { url, filename };
+  }
   Listing.findByIdAndUpdate(id, doc1).then((data) => {
     req.flash("success", "Listing has been Updated Successfully");
     res.redirect("/listings/" + id);
