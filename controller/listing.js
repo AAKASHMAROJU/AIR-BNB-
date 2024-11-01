@@ -11,12 +11,14 @@ module.exports.newListing = (req, res) => {
 
 module.exports.editListing = async (req, res) => {
   const { id } = req.params;
-  const data = await Listing.findById(id);
+  let data = await Listing.findById(id);
   if (!data) {
     req.flash("error", "Listing you are Looking for Does not Exist");
     res.redirect("/listings");
   }
-  res.render("listings/editListing", { data: data });
+  let displayImage = data.image.url;
+  displayImage = displayImage.replace("/upload/", "/upload/w_250/e_blur:300/");
+  res.render("listings/editListing", { data: data, displayImage });
 };
 
 module.exports.showListing = async (req, res, next) => {
