@@ -30,14 +30,14 @@ app.engine("ejs", ejsMate);
 const store = MongoStore.create({
   mongoUrl: process.env.MONGO_ATLAS_URL,
   crypto: {
-    secret: "mysupersecret",
+    secret: process.env.SECRET,
   },
   touchAfter: 24 * 60 * 60,
 });
 
 const sessionOptions = {
   store,
-  secret: "mysupersecret",
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {
