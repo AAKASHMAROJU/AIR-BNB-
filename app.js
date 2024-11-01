@@ -11,6 +11,7 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError");
 const session = require("express-session");
+const MongoStore = require("connect-mongo"); // store the session info in the mongo atlas store
 const listingRouter = require("./routes/listing");
 const reviewRouter = require("./routes/review");
 const userRouter = require("./routes/user");
@@ -26,7 +27,16 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 
+const store = MongoStore.create({
+  mongoUrl: process.env.MONGO_ATLAS_URL,
+  crypto: {
+    secret: "mysupersecret",
+  },
+  touchAfter: 24 * 60 * 60,
+});
+
 const sessionOptions = {
+  store,
   secret: "mysupersecret",
   resave: false,
   saveUninitialized: true,
@@ -36,6 +46,10 @@ const sessionOptions = {
     httpOnly: true,
   },
 };
+
+store.on("error", (err) => {
+  console.log("Error in Session Store ", err);
+});
 
 app.use(session(sessionOptions));
 app.use(flash());
@@ -62,7 +76,7 @@ app.use("/listings/:id/review", reviewRouter);
 
 app.use("/", userRouter);
 
-const MONGODB_URL = "mongodb://localhost:27017/airbnb-db";
+const MONGODB_URL = process.env.MONGO_ATLAS_URL;
 
 async function main() {
   await mongoose.connect(MONGODB_URL);
