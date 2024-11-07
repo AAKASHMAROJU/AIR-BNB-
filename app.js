@@ -1,7 +1,6 @@
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
-console.log(process.env.secret);
 const express = require("express");
 const app = express();
 const port = 8080;
@@ -59,9 +58,9 @@ app.use(passport.session());
 
 passport.use(new LocalStrategy(User.authenticate()));
 
-passport.serializeUser(User.serializeUser());
+passport.serializeUser(User.serializeUser()); // how the user details is stored in session => UserID
 
-passport.deserializeUser(User.deserializeUser());
+passport.deserializeUser(User.deserializeUser()); // retrieval
 
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");

@@ -30,7 +30,7 @@
         </div>
         <div class="col-6">
           <form
-            action="http://localhost:8080/listings/<%= data._id %>/delete?_method=DELETE"
+            action="/listings/<%= data._id %>/delete?_method=DELETE"
             method="post"
           >
             <button type="submit" class="btn btn-danger">DELETE</button>
@@ -40,9 +40,7 @@
       <% } %>
       <div>
         <button>
-          <a href="http://localhost:8080/listings/<%= data._id %>/review"
-            >ADD REVIEW</a
-          >
+          <a href="/listings/<%= data._id %>/review">ADD REVIEW</a>
         </button>
       </div>
 
@@ -60,7 +58,7 @@
             ></p>
             <h5 class="card-title"><%= e.comment%></h5>
             <form
-              action="http://localhost:8080/listings/<%= data._id %>/review/<%= e._id %>?_method=DELETE"
+              action="/listings/<%= data._id %>/review/<%= e._id %>?_method=DELETE"
               method="post"
             >
               <button type="submit" class="del-icon-btn">
